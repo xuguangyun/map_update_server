@@ -1,0 +1,48 @@
+// Copyright 2017 The Cartographer Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "cartographer/sensor/proto/sensor.proto";
+import "cartographer/transform/proto/transform.proto";
+
+package cartographer.cloud.proto;
+
+
+message SensorMetadata { 
+  string sensor_id = 1;
+  string client_id = 2;
+}
+
+
+message AddRangefinderDataRequest {
+  SensorMetadata sensor_metadata = 1;
+  int64 timestamp = 2;
+  cartographer.transform.proto.Rigid3d local_pose = 3;
+  cartographer.sensor.proto.TimedPointCloudData timed_point_cloud_data = 4;
+}
+
+message AddRangefinderDataResponse {
+  SensorMetadata sensor_metadata = 1;
+  int64 timestamp = 2; 
+}
+
+
+service MapBuilderService {
+ 
+  // Same for range-finder data.
+  rpc AddRangefinderData(stream AddRangefinderDataRequest)
+      returns (AddRangefinderDataResponse);
+  
+}
